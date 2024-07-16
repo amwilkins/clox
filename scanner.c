@@ -31,7 +31,7 @@ static bool isDigit(char c) { return c >= '0' && c <= '9'; }
 static bool isAtEnd() { return *scanner.current == '\0'; }
 
 // advance to next character
-static bool advance() {
+static char advance() {
   scanner.current++;
   return scanner.current[-1];
 }
@@ -175,6 +175,7 @@ static Token identifier() {
 
 // if digit, scan full number
 static Token number() {
+  printf("\nFoundNumber");
   while (isDigit(peek()))
     advance();
   //
@@ -218,7 +219,8 @@ Token scanToken() {
   if (isDigit(c))
     return number();
 
-  // scan for other characters
+  printf("c: %d\n", c);
+  //  scan for other characters
   switch (c) {
   case '(':
     return makeToken(TOKEN_LEFT_PAREN);
