@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "memory.h"
 #include "object.h"
+#include "table.h"
 #include "vm.h"
 
 VM vm;
@@ -31,9 +32,13 @@ static void runtimeError(const char *format, ...) {
 void initVM() {
   resetStack();
   vm.objects = NULL;
+  initTable(&vm.strings);
 }
 
-void freeVM() { freeObjects(); }
+void freeVM() {
+  freeTable(&vm.strings);
+  freeObjects();
+}
 
 void push(Value value) {
   *vm.stackTop = value;
@@ -136,9 +141,6 @@ static InterpretResult run() {
       }
       break;
     }
-    case OP_ADD:
-      BINARY_OP(NUMBER_VAL, +);
-      break;
     case OP_SUBTRACT:
       BINARY_OP(NUMBER_VAL, -);
       break;
